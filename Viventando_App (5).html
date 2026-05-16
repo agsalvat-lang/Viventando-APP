@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0A1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Viventando">
+<title>Viventando — Gestión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A1628;--ink2:#1E2D45;--ink3:#3B4F6B;--ink4:#7A8FA8;
+  --paper:#F5F3EE;--verde:#1D9E75;--verde2:#0F6E56;--verde-cl:rgba(29,158,117,.12);
+  --amber:#E8A020;--amber-cl:rgba(232,160,32,.12);--amber-b:rgba(232,160,32,.25);
+  --coral:#E05A3A;--coral-cl:rgba(224,90,58,.12);
+  --blue:#185FA5;--blue-cl:rgba(24,95,165,.12);
+  --r:16px;--r-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--ink);font-family:'Sora',sans-serif;color:var(--paper);overscroll-behavior:none}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* HOME */
+#home{align-items:center;justify-content:center;padding:40px 24px;position:relative;overflow:hidden}
+.bg-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(29,158,117,.05) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(29,158,117,.05) 1px,transparent 1px);
+  background-size:44px 44px}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+.orb1{width:320px;height:320px;background:rgba(29,158,117,.11);top:-100px;right:-80px}
+.orb2{width:220px;height:220px;background:rgba(232,160,32,.07);bottom:20px;left:-60px}
+.home-content{position:relative;z-index:1;width:100%;max-width:400px}
+
+.logo-wrap{text-align:center;margin-bottom:44px}
+.logo-mark{width:76px;height:76px;border-radius:22px;margin:0 auto 16px;
+  background:var(--verde);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 10px rgba(29,158,117,.12),0 0 0 20px rgba(29,158,117,.05)}
+.logo-name{font-family:'DM Serif Display',serif;font-size:30px;letter-spacing:-.5px}
+.logo-name em{color:var(--verde);font-style:normal}
+.logo-tagline{font-size:12px;color:var(--ink4);margin-top:4px;letter-spacing:.05em}
+
+.hlabel{font-size:10px;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;text-align:center}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.abtn{background:var(--ink2);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);
+  padding:20px 14px;cursor:pointer;transition:border-color .18s,background .18s;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:9px;width:100%;font-family:'Sora',sans-serif}
+.abtn:active{transform:scale(.97)}
+.abtn.eg:hover{border-color:var(--coral);background:var(--coral-cl)}
+.abtn.in:hover{border-color:var(--verde);background:var(--verde-cl)}
+.abtn.ca:hover{border-color:var(--amber);background:var(--amber-cl)}
+.abtn-full{grid-column:span 2}
+.aico{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.aico-eg{background:var(--coral-cl);color:var(--coral)}
+.aico-in{background:var(--verde-cl);color:var(--verde)}
+.aico-ca{background:var(--amber-cl);color:var(--amber)}
+.aname{font-size:13px;font-weight:600;color:var(--paper)}
+.adesc{font-size:11px;color:var(--ink4);line-height:1.4}
+.version{font-size:11px;color:var(--ink3);text-align:center;margin-top:10px}
+
+/* HEADER */
+.app-header{background:var(--ink);padding:16px 20px 0;position:sticky;top:0;z-index:10}
+.htop{display:flex;align-items:center;justify-content:space-between}
+.hback{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);
+  border:none;cursor:pointer;color:var(--paper);font-size:18px;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;font-family:'Sora',sans-serif}
+.hback:active{background:rgba(255,255,255,.12)}
+.htitle{font-size:15px;font-weight:500}
+.hbadge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
+.bg-eg{background:var(--coral-cl);color:var(--coral)}
+.bg-in{background:var(--verde-cl);color:var(--verde)}
+.bg-ca{background:var(--amber-cl);color:var(--amber)}
+.tabs{display:flex;padding:12px 20px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.tab{flex:1;padding:9px 0;font-size:13px;font-weight:500;color:var(--ink4);
+  background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;
+  transition:all .2s;font-family:'Sora',sans-serif}
+.tab.active{color:var(--verde);border-bottom-color:var(--verde)}
+
+/* SCROLL */
+.scroll-content{flex:1;overflow-y:auto;padding:20px;-webkit-overflow-scrolling:touch}
+
+/* FORM */
+.fsec{margin-bottom:20px}
+.flbl{font-size:10px;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.ifield{width:100%;background:var(--ink2);border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--r-sm);padding:13px 16px;color:var(--paper);
+  font-family:'Sora',sans-serif;font-size:15px;outline:none;-webkit-appearance:none;
+  transition:border-color .2s}
+.ifield:focus{border-color:var(--verde)}
+.ifield::placeholder{color:var(--ink3)}
+select.ifield{appearance:none;-webkit-appearance:none;padding-right:40px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A8FA8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center}
+select.ifield option{background:#1E2D45}
+.ifield-date{color-scheme:dark}
+
+/* MONTO */
+.monto-wrap{background:var(--ink2);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-sm);
+  padding:6px 16px;display:flex;align-items:center;gap:6px;transition:border-color .2s}
+.monto-wrap:focus-within{border-color:var(--verde)}
+.monto-sym{font-size:24px;color:var(--ink4);font-weight:300;flex-shrink:0}
+.monto-inp{flex:1;background:transparent;border:none;outline:none;font-family:'Sora',sans-serif;
+  font-size:38px;font-weight:600;letter-spacing:-1px;color:var(--paper);padding:10px 0;
+  -webkit-appearance:none;width:100%}
+.monto-inp::placeholder{color:var(--ink3)}
+.monto-inp::-webkit-inner-spin-button,.monto-inp::-webkit-outer-spin-button{-webkit-appearance:none}
+.monto-hint{font-size:11px;color:var(--ink3);margin-top:4px;padding-left:2px;margin-bottom:0}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:8px 13px;border-radius:20px;font-size:12px;font-weight:500;
+  border:1px solid rgba(255,255,255,.1);background:var(--ink2);color:var(--ink4);
+  cursor:pointer;transition:all .15s;font-family:'Sora',sans-serif;white-space:nowrap}
+.chip.on{background:var(--verde-cl);border-color:var(--verde);color:var(--verde)}
+.chip.on-a{background:var(--amber-cl);border-color:var(--amber);color:var(--amber)}
+.chip.on-r{background:var(--coral-cl);border-color:var(--coral);color:var(--coral)}
+.chip.on-b{background:var(--blue-cl);border-color:var(--blue);color:var(--blue)}
+.chip:active{transform:scale(.96)}
+
+/* CONDICIONAL - aparece cuando está pendiente */
+.campo-extra{background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.2);
+  border-radius:var(--r-sm);padding:12px 14px;margin-top:10px}
+.campo-extra-title{font-size:10px;font-weight:600;color:var(--verde);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:8px}
+.cond-box{background:rgba(232,160,32,.07);border:1px solid var(--amber-b);
+  border-radius:var(--r-sm);padding:14px;margin-top:10px}
+.cond-title{font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:10px}
+.cond-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* DIVIDER */
+.fdiv{height:1px;background:rgba(255,255,255,.06);margin:18px 0}
+
+/* QUIEN */
+.quien-row{display:flex;gap:8px}
+.quien-chip{flex:1;padding:10px 6px;border-radius:var(--r-sm);font-size:12px;font-weight:500;
+  border:1px solid rgba(255,255,255,.1);background:var(--ink2);color:var(--ink4);
+  cursor:pointer;transition:all .15s;font-family:'Sora',sans-serif;text-align:center}
+.quien-chip.on{background:var(--verde-cl);border-color:var(--verde);color:var(--verde)}
+
+/* FOTO */
+.foto-box{border:1.5px dashed rgba(255,255,255,.12);border-radius:var(--r-sm);
+  padding:18px;text-align:center;cursor:pointer;position:relative;transition:border-color .2s}
+.foto-box:active{border-color:var(--verde)}
+.foto-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.foto-ico{font-size:24px;color:var(--ink3);margin-bottom:5px}
+.foto-lbl{font-size:12px;color:var(--ink4)}
+#foto-preview{width:100%;height:100px;object-fit:cover;border-radius:8px;display:none}
+
+/* SUBMIT */
+.sbtn{width:100%;padding:17px;border-radius:var(--r);color:#fff;
+  font-family:'Sora',sans-serif;font-size:15px;font-weight:600;border:none;cursor:pointer;
+  transition:all .2s;margin-bottom:32px;margin-top:4px}
+.sbtn:active{transform:scale(.98);opacity:.9}
+.sbtn.loading{opacity:.7;pointer-events:none}
+.sbtn-verde{background:var(--verde);box-shadow:0 4px 20px rgba(29,158,117,.3)}
+.sbtn-amber{background:var(--amber);box-shadow:0 4px 20px rgba(232,160,32,.3)}
+.sbtn-blue{background:var(--blue);box-shadow:0 4px 20px rgba(24,95,165,.3)}
+
+/* SUCCESS */
+#success{align-items:center;justify-content:center;text-align:center;padding:40px 24px}
+.sico{width:80px;height:80px;border-radius:50%;margin:0 auto 22px;
+  display:flex;align-items:center;justify-content:center;animation:pop .4s cubic-bezier(.17,.67,.35,1.3)}
+.sico-verde{background:rgba(29,158,117,.14)}
+.sico-amber{background:rgba(232,160,32,.14)}
+.sico-blue{background:rgba(24,95,165,.14)}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.stitle{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:6px}
+.ssub{font-size:13px;color:var(--ink4);margin-bottom:24px;line-height:1.6}
+.samount{font-size:40px;font-weight:600;letter-spacing:-1.5px;margin-bottom:20px}
+.sdetail{background:var(--ink2);border-radius:var(--r);padding:16px;margin-bottom:24px;
+  text-align:left;width:100%;max-width:340px}
+.srow{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.06)}
+.srow:last-child{border-bottom:none}
+.srow span:first-child{color:var(--ink4)}
+.srow span:last-child{font-weight:500;max-width:200px;text-align:right}
+.spill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.spill-v{background:var(--verde-cl);color:var(--verde)}
+.spill-a{background:var(--amber-cl);color:var(--amber)}
+.spill-b{background:var(--blue-cl);color:var(--blue)}
+.btn-nuevo{width:100%;max-width:340px;padding:15px;border-radius:var(--r);
+  background:var(--verde);color:#fff;font-family:'Sora',sans-serif;font-size:14px;
+  font-weight:600;border:none;cursor:pointer;margin-bottom:10px}
+.btn-home{width:100%;max-width:340px;padding:15px;border-radius:var(--r);
+  background:transparent;color:var(--ink4);font-family:'Sora',sans-serif;
+  font-size:14px;border:1px solid rgba(255,255,255,.08);cursor:pointer}
+
+/* HISTORIAL */
+.hist-item{background:var(--ink2);border-radius:var(--r-sm);padding:13px 15px;
+  margin-bottom:8px;display:flex;align-items:center;gap:12px;
+  border:1px solid rgba(255,255,255,.05);animation:sli .2s ease}
+@keyframes sli{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.hdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.hdot-eg{background:var(--coral)}.hdot-in{background:var(--verde)}.hdot-ca{background:var(--amber)}
+.hinfo{flex:1;min-width:0}
+.hnombre{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hmeta{font-size:11px;color:var(--ink4);margin-top:2px}
+.hright{text-align:right;flex-shrink:0}
+.hmonto{font-size:14px;font-weight:600}
+.hmonto-eg{color:var(--coral)}.hmonto-in{color:var(--verde)}.hmonto-ca{color:var(--amber)}
+.hpill{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;display:inline-block;margin-top:3px}
+.hp-pag{background:var(--verde-cl);color:var(--verde)}
+.hp-pen{background:var(--amber-cl);color:var(--amber)}
+.hp-cob{background:var(--blue-cl);color:var(--blue)}
+.empty{text-align:center;padding:40px 20px;color:var(--ink4);font-size:14px;line-height:1.7}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--ink2);border:1px solid rgba(255,255,255,.1);border-radius:24px;
+  padding:12px 20px;font-size:13px;opacity:0;transition:all .3s;pointer-events:none;
+  white-space:nowrap;z-index:100;box-shadow:0 8px 40px rgba(10,22,40,.2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <div class="bg-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="home-content">
+    <div class="logo-wrap">
+      <div class="logo-mark">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect x="5" y="26" width="6" height="9" rx="2" fill="white" opacity=".45"/>
+          <rect x="13" y="20" width="6" height="15" rx="2" fill="white" opacity=".65"/>
+          <rect x="21" y="14" width="6" height="21" rx="2" fill="white" opacity=".82"/>
+          <rect x="29" y="8"  width="6" height="27" rx="2" fill="white"/>
+          <path d="M7 18L21 8L35 2" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+          <path d="M29 2h6v6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="logo-name">Viven<em>tando</em></div>
+      <div class="logo-tagline">Sistema de gestión · Finanzas simples</div>
+    </div>
+
+    <div class="hlabel">¿Qué querés registrar?</div>
+    <div class="hgrid">
+      <button class="abtn eg" onclick="entrar('egreso')">
+        <div class="aico aico-eg">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".35"/>
+            <path d="M10 17V10M3 14h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="10" cy="17" r="2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="aname">Compra / Gasto</div>
+        <div class="adesc">Pagado o pendiente</div>
+      </button>
+      <button class="abtn in" onclick="entrar('ingreso')">
+        <div class="aico aico-in">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17V3M3 10h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".35"/>
+            <path d="M10 3v7M3 6h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="10" cy="3" r="2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="aname">Venta / Ingreso</div>
+        <div class="adesc">Cobrado o a cobrar</div>
+      </button>
+      <button class="abtn ca abtn-full" onclick="entrar('caja')">
+        <div class="aico aico-ca">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="2" y="6" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M6 6V4a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="10" cy="12" r="2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="aname">Movimiento de caja</div>
+        <div class="adesc">Efectivo · señas · cobros en mano</div>
+      </button>
+    </div>
+    <div class="version">Viventando · v2.0</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="screen">
+  <div class="app-header">
+    <div class="htop">
+      <button class="hback" onclick="volverHome()">&#8592;</button>
+      <span class="htitle" id="htitle">Compra / Gasto</span>
+      <span class="hbadge" id="hbadge"></span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tab-f" onclick="switchTab('form')">Cargar</button>
+      <button class="tab" id="tab-h" onclick="switchTab('hist')">Historial</button>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="scroll-content" id="panel-form">
+
+    <!-- MONTO -->
+    <div class="fsec">
+      <div class="flbl">Monto</div>
+      <div class="monto-wrap">
+        <span class="monto-sym">$</span>
+        <input type="number" inputmode="numeric" pattern="[0-9]*"
+          class="monto-inp" id="monto-inp" placeholder="0" min="0" autocomplete="off">
+      </div>
+      <p class="monto-hint">Sin puntos ni comas</p>
+    </div>
+
+    <!-- DESCRIPCION -->
+    <div class="fsec">
+      <div class="flbl" id="flbl-desc">Proveedor</div>
+      <input type="text" class="ifield" id="inp-desc" placeholder="Ej: Guatex, costura Sabina..." autocomplete="off">
+    </div>
+
+    <!-- CATEGORIA -->
+    <div class="fsec">
+      <div class="flbl" id="flbl-cat">Categoría</div>
+      <div class="chips" id="chips-cat"></div>
+    </div>
+
+    <div class="fdiv"></div>
+
+    <!-- YA SE PAGO / COBRO -->
+    <div class="fsec">
+      <div class="flbl" id="flbl-estado">¿Ya se pagó?</div>
+      <div class="chips" id="chips-estado"></div>
+
+      <!-- CONDICIONAL: si YA SE PAGO → forma de pago -->
+      <div id="cond-pagado" style="display:none;margin-top:12px">
+        <div class="flbl">Forma de pago</div>
+        <div class="chips" id="chips-pago">
+          <div class="chip" onclick="selChip(this,'pago')">Transferencia</div>
+          <div class="chip" onclick="selChip(this,'pago')">Efectivo</div>
+          <div class="chip" onclick="selChip(this,'pago')">Cheque</div>
+          <div class="chip" onclick="selChip(this,'pago')">Débito</div>
+          <div class="chip" onclick="selChip(this,'pago')">MP</div>
+        </div>
+      </div>
+
+      <!-- CAMPO EXTRA: N° factura (ingreso) / N° cheque (cheque) -->
+      <div id="campo-factura" style="display:none;margin-top:12px">
+        <div class="campo-extra">
+          <div class="campo-extra-title" id="campo-factura-title">N° de factura</div>
+          <input type="text" class="ifield" id="inp-factura"
+            placeholder="Ej: 0001-00001234" autocomplete="off" style="margin-top:6px">
+        </div>
+      </div>
+
+      <!-- CAMPO EXTRA: N° cheque -->
+      <div id="campo-cheque" style="display:none;margin-top:12px">
+        <div class="campo-extra">
+          <div class="campo-extra-title">N° de cheque</div>
+          <input type="text" class="ifield" id="inp-cheque"
+            placeholder="Ej: 00123456" autocomplete="off" style="margin-top:6px">
+        </div>
+      </div>
+
+      <!-- CONDICIONAL: si PENDIENTE → fecha vencimiento + prioridad -->
+      <div id="cond-pendiente" class="cond-box" style="display:none">
+        <div class="cond-title" id="cond-title">Datos del vencimiento</div>
+        <div class="cond-grid">
+          <div>
+            <div class="flbl" id="flbl-fecha-venc">Fecha estimada</div>
+            <input type="date" class="ifield ifield-date" id="inp-fecha-venc">
+          </div>
+          <div>
+            <div class="flbl">Prioridad</div>
+            <div class="chips" id="chips-prior">
+              <div class="chip on-a" onclick="selChip(this,'prior')">Alta</div>
+              <div class="chip" onclick="selChip(this,'prior')">Normal</div>
+              <div class="chip" onclick="selChip(this,'prior')">Baja</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <div class="flbl" id="flbl-forma-esp">Forma de pago esperada</div>
+          <div class="chips" id="chips-forma-esp">
+            <div class="chip" onclick="selChip(this,'formaEsp')">Transferencia</div>
+            <div class="chip" onclick="selChip(this,'formaEsp')">Efectivo</div>
+            <div class="chip" onclick="selChip(this,'formaEsp')">Cheque</div>
+            <div class="chip" onclick="selChip(this,'formaEsp')">A definir</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fdiv"></div>
+
+    <!-- QUIEN -->
+    <div class="fsec">
+      <div class="flbl">¿Quién registra?</div>
+      <div class="quien-row" id="quien-row">
+        <div class="quien-chip on" onclick="selQuien(this)">Maca</div>
+        <div class="quien-chip" onclick="selQuien(this)">Claudia</div>
+        <div class="quien-chip" onclick="selQuien(this)">Otro</div>
+      </div>
+    </div>
+
+    <!-- FOTO -->
+    <div class="fsec">
+      <div class="flbl">Comprobante (opcional)</div>
+      <div class="foto-box">
+        <input type="file" id="foto-inp" accept="image/*" capture="environment" onchange="prevFoto(this)">
+        <img id="foto-preview">
+        <div id="foto-ph">
+          <div class="foto-ico">&#128247;</div>
+          <div class="foto-lbl">Foto del comprobante</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="sbtn sbtn-verde" id="sbtn" onclick="enviar()">Registrar</button>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="scroll-content" id="panel-hist" style="display:none">
+    <div id="hist-list"></div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success" class="screen">
+  <div class="sico sico-verde" id="sico">
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+      <path d="M8 19l8 8 14-14" stroke="#1D9E75" id="strok" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="stitle" id="stitle">Registrado</div>
+  <div class="ssub" id="ssub"></div>
+  <div class="samount" id="samount"></div>
+  <div class="sdetail" id="sdetail"></div>
+  <button class="btn-nuevo" onclick="nuevo()">Cargar otro</button>
+  <button class="btn-home" onclick="volverHome()">Volver al inicio</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbwNywb4KXmVjpe429XVLpen5RmEAug_PgWvwqYM1ZQswuMsjNHhpZqGSVVRW-we5x07/exec';
+
+const CFG={
+  egreso:{
+    title:'Compra / Gasto', badge:'bg-eg', badgeTxt:'EGRESO',
+    desc:'Proveedor', cat:'Categoría del gasto',
+    estadoLabel:'¿Ya se pagó?',
+    estados:[{t:'Sí, ya pagué',k:'pagado'},{t:'No, queda pendiente',k:'pendiente'}],
+    cats:['Tela / insumo','Costura / mano de obra','Embalaje / papelería',
+          'Transporte / flete','Servicios','Sueldos','Impuestos / banco','Otro'],
+    condTitle:'Datos del vencimiento',
+    condFechaLbl:'Fecha de vencimiento',
+    condFormaLbl:'Forma de pago esperada',
+    btnPagado:{txt:'Registrar gasto pagado',cls:'sbtn-verde'},
+    btnPendiente:{txt:'Registrar como deuda pendiente',cls:'sbtn-amber'},
+  },
+  ingreso:{
+    title:'Venta / Ingreso', badge:'bg-in', badgeTxt:'INGRESO',
+    desc:'Cliente / origen', cat:'Tipo de ingreso / venta',
+    estadoLabel:'¿Ya se cobró?',
+    estados:[{t:'Sí, ya cobré',k:'cobrado'},{t:'No, queda pendiente',k:'pendiente'}],
+    cats:['Venta facturada','Cobro efectivo','Cobro cheque','Cobro transferencia',
+          'Anticipo / seña','Otro ingreso'],
+    condTitle:'Datos del cobro pendiente',
+    condFechaLbl:'Fecha estimada de cobro',
+    condFormaLbl:'Forma de cobro esperada',
+    btnPagado:{txt:'Registrar ingreso cobrado',cls:'sbtn-verde'},
+    btnPendiente:{txt:'Registrar como cuenta a cobrar',cls:'sbtn-blue'},
+  },
+  caja:{
+    title:'Movimiento de caja', badge:'bg-ca', badgeTxt:'CAJA',
+    desc:'Descripción', cat:'Tipo de movimiento',
+    estadoLabel:'Estado',
+    estados:[{t:'Cobrado / Pagado',k:'pagado'},{t:'Pendiente',k:'pendiente'}],
+    cats:['Efectivo HC','Seña cobrada','Seña entregada','Cobro en mano','Pago en efectivo','Otro'],
+    condTitle:'Datos del vencimiento',
+    condFechaLbl:'Fecha estimada',
+    condFormaLbl:'Forma esperada',
+    btnPagado:{txt:'Registrar movimiento',cls:'sbtn-amber'},
+    btnPendiente:{txt:'Registrar como pendiente',cls:'sbtn-amber'},
+  }
+};
+
+let tipo=null,selCat='',selEstado='',selPago='',selPrior='Alta',selFormaEsp='',selQuienVal='Maca';
+let hist=JSON.parse(localStorage.getItem('viv2_hist')||'[]');
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function volverHome(){show('home')}
+function nuevo(){reset();switchTab('form');show('app')}
+
+function entrar(t){
+  tipo=t;reset();
+  const C=CFG[t];
+  document.getElementById('htitle').textContent=C.title;
+  const b=document.getElementById('hbadge');
+  b.textContent=C.badgeTxt;b.className='hbadge '+C.badge;
+  document.getElementById('flbl-desc').textContent=C.desc;
+  document.getElementById('inp-desc').placeholder=t==='egreso'?'Ej: Guatex, costura Sabina...':t==='ingreso'?'Ej: Home Collection, Lamb...':'Ej: Efectivo HC semana 1';
+  document.getElementById('flbl-cat').textContent=C.cat;
+  document.getElementById('flbl-estado').textContent=C.estadoLabel;
+  document.getElementById('cond-title').textContent=C.condTitle;
+  document.getElementById('flbl-fecha-venc').textContent=C.condFechaLbl;
+  document.getElementById('flbl-forma-esp').textContent=C.condFormaLbl;
+  // Set default fecha vencimiento = hoy + 30 días
+  const d=new Date();d.setDate(d.getDate()+30);
+  document.getElementById('inp-fecha-venc').value=d.toISOString().slice(0,10);
+
+  const cc=document.getElementById('chips-cat');
+  cc.innerHTML='';
+  C.cats.forEach(c=>{const d=document.createElement('div');d.className='chip';d.textContent=c;d.onclick=()=>selChip(d,'cat');cc.appendChild(d)});
+
+  const ce=document.getElementById('chips-estado');
+  ce.innerHTML='';
+  C.estados.forEach(e=>{const d=document.createElement('div');d.className='chip';d.textContent=e.t;d.dataset.key=e.k;d.onclick=()=>{selChip(d,'estado');toggleCond(e.k)};ce.appendChild(d)});
+
+  // Default: primer estado seleccionado
+  const firstEstado=ce.querySelector('.chip');
+  if(firstEstado){firstEstado.classList.add('on');selEstado=firstEstado.dataset.key;toggleCond(selEstado)}
+
+  switchTab('form');show('app');
+}
+
+function toggleCond(estado){
+  const pagado=document.getElementById('cond-pagado');
+  const pendiente=document.getElementById('cond-pendiente');
+  pagado.style.display=estado==='pagado'?'block':'none';
+  pendiente.style.display=estado==='pendiente'?'block':'none';
+  // Mostrar N° factura solo en ingresos
+  const campoFact=document.getElementById('campo-factura');
+  if(campoFact) campoFact.style.display=tipo==='ingreso'?'block':'none';
+  // Actualizar botón
+  const C=CFG[tipo];
+  const btnCfg=estado==='pagado'?C.btnPagado:C.btnPendiente;
+  const btn=document.getElementById('sbtn');
+  btn.textContent=btnCfg.txt;
+  btn.className='sbtn '+btnCfg.cls;
+}
+
+function switchTab(tab){
+  document.getElementById('tab-f').classList.toggle('active',tab==='form');
+  document.getElementById('tab-h').classList.toggle('active',tab==='hist');
+  document.getElementById('panel-form').style.display=tab==='form'?'block':'none';
+  document.getElementById('panel-hist').style.display=tab==='hist'?'block':'none';
+  if(tab==='hist')renderHist();
+}
+
+function selChip(el,group){
+  const scope=el.closest('.chips,.cond-box');
+  const chips=scope?scope.querySelectorAll('.chip'):[];
+  chips.forEach(c=>{c.classList.remove('on','on-a','on-r','on-b')});
+  const cls=group==='estado'&&el.dataset.key==='pendiente'?'on-a':
+            group==='pago'||group==='formaEsp'?'on':
+            group==='prior'&&el.textContent==='Alta'?'on-a':'on';
+  el.classList.add(cls);
+  if(group==='cat')selCat=el.textContent;
+  if(group==='estado')selEstado=el.dataset.key;
+  if(group==='pago'){
+    selPago=el.textContent;
+    // Mostrar N° cheque si forma de pago es Cheque
+    const campoCheque=document.getElementById('campo-cheque');
+    if(campoCheque) campoCheque.style.display=el.textContent==='Cheque'?'block':'none';
+  }
+  if(group==='prior')selPrior=el.textContent;
+  if(group==='formaEsp')selFormaEsp=el.textContent;
+}
+
+function selQuien(el){
+  document.getElementById('quien-row').querySelectorAll('.quien-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');selQuienVal=el.textContent;
+}
+
+function prevFoto(inp){
+  if(!inp.files.length)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    document.getElementById('foto-preview').src=e.target.result;
+    document.getElementById('foto-preview').style.display='block';
+    document.getElementById('foto-ph').style.display='none';
+  };
+  r.readAsDataURL(inp.files[0]);
+}
+
+function reset(){
+  selCat='';selEstado='';selPago='';selPrior='Alta';selFormaEsp='';selQuienVal='Maca';
+  document.getElementById('monto-inp').value='';
+  document.getElementById('inp-desc').value='';
+  document.getElementById('foto-preview').style.display='none';
+  document.getElementById('foto-ph').style.display='block';
+  document.getElementById('foto-inp').value='';
+  document.querySelectorAll('.chip,.quien-chip').forEach(c=>c.classList.remove('on','on-a','on-r','on-b'));
+  document.getElementById('quien-row').querySelectorAll('.quien-chip')[0].classList.add('on');
+  document.getElementById('cond-pagado').style.display='none';
+  document.getElementById('cond-pendiente').style.display='none';
+  document.getElementById('campo-factura').style.display='none';
+  document.getElementById('campo-cheque').style.display='none';
+  const inpF=document.getElementById('inp-factura');if(inpF)inpF.value='';
+  const inpC=document.getElementById('inp-cheque');if(inpC)inpC.value='';
+  // reset prioridad
+  const pr=document.getElementById('chips-prior');
+  if(pr)pr.querySelectorAll('.chip')[0].classList.add('on-a');
+}
+
+async function enviar(){
+  const monto=parseInt(document.getElementById('monto-inp').value)||0;
+  const desc=document.getElementById('inp-desc').value.trim();
+  if(!monto){toast('Ingresá el monto');return}
+  if(!desc){toast('Completá la descripción');return}
+  if(!selCat){toast('Elegí una categoría');return}
+  if(!selEstado){toast('Indicá si ya se pagó/cobró');return}
+  if(selEstado==='pagado'&&!selPago){toast('Elegí la forma de pago');return}
+
+  const btn=document.getElementById('sbtn');
+  btn.classList.add('loading');btn.textContent='Guardando...';
+
+  const now=new Date();
+  const fecha=now.toLocaleDateString('es-AR');
+  const mes=now.toISOString().slice(0,7);
+  const fechaVenc=document.getElementById('inp-fecha-venc').value;
+
+  const nroFactura=document.getElementById('inp-factura').value.trim();
+  const nroCheque=document.getElementById('inp-cheque').value.trim();
+  const data={
+    tipo:tipo.toUpperCase(),
+    usuario:selQuienVal,
+    fecha,mes,
+    descripcion:desc,
+    categoria:selCat,
+    monto,
+    estado:selEstado==='pagado'?'Pagado/Cobrado':'Pendiente',
+    formaPago:selEstado==='pagado'?selPago:selFormaEsp||'A definir',
+    nroFactura:nroFactura||'',
+    nroCheque:nroCheque||'',
+    fechaVencimiento:selEstado==='pendiente'?fechaVenc:'',
+    prioridad:selEstado==='pendiente'?selPrior:'',
+    timestamp:now.toISOString()
+  };
+
+  hist.unshift({...data,id:Date.now()});
+  if(hist.length>80)hist=hist.slice(0,80);
+  localStorage.setItem('viv2_hist',JSON.stringify(hist));
+
+  try{await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})}catch(e){}
+
+  // Success screen
+  const esPendiente=selEstado==='pendiente';
+  const sicoEl=document.getElementById('sico');
+  const strokeEl=document.getElementById('strok');
+  if(esPendiente&&tipo==='ingreso'){
+    sicoEl.className='sico sico-blue';
+    strokeEl.setAttribute('stroke','#185FA5');
+  } else if(esPendiente){
+    sicoEl.className='sico sico-amber';
+    strokeEl.setAttribute('stroke','#E8A020');
+  } else {
+    sicoEl.className='sico sico-verde';
+    strokeEl.setAttribute('stroke','#1D9E75');
+  }
+
+  const titles={egreso:{pagado:'Gasto registrado',pendiente:'Deuda registrada'},
+                ingreso:{pagado:'Ingreso registrado',pendiente:'Cuenta a cobrar registrada'},
+                caja:{pagado:'Movimiento registrado',pendiente:'Pendiente registrado'}};
+  document.getElementById('stitle').textContent=titles[tipo][selEstado]||'Registrado';
+  document.getElementById('ssub').textContent='Guardado el '+fecha+' por '+selQuienVal;
+
+  const color=esPendiente&&tipo==='ingreso'?'var(--blue)':esPendiente?'var(--amber)':'var(--verde)';
+  document.getElementById('samount').style.color=color;
+  document.getElementById('samount').textContent='$'+monto.toLocaleString('es-AR');
+
+  const pill=esPendiente&&tipo==='ingreso'?'<span class="spill spill-b">A cobrar</span>':
+             esPendiente?'<span class="spill spill-a">Pendiente</span>':
+             '<span class="spill spill-v">Pagado</span>';
+  document.getElementById('sdetail').innerHTML=`
+    <div class="srow"><span>Descripción</span><span>${desc}</span></div>
+    <div class="srow"><span>Categoría</span><span>${selCat}</span></div>
+    <div class="srow"><span>Estado</span><span>${pill}</span></div>
+    ${selEstado==='pagado'?`<div class="srow"><span>Forma de pago</span><span>${selPago}</span></div>`:''}
+    ${nroFactura?`<div class="srow"><span>N° Factura</span><span>${nroFactura}</span></div>`:''}
+    ${nroCheque?`<div class="srow"><span>N° Cheque</span><span>${nroCheque}</span></div>`:''}
+    ${selEstado==='pendiente'?`<div class="srow"><span>Vence / cobro est.</span><span>${fechaVenc||'—'}</span></div>`:''}
+    ${selEstado==='pendiente'?`<div class="srow"><span>Prioridad</span><span>${selPrior}</span></div>`:''}
+    <div class="srow"><span>Registrado por</span><span>${selQuienVal}</span></div>`;
+
+  btn.classList.remove('loading');
+  const C=CFG[tipo];
+  const btnCfg=selEstado==='pagado'?C.btnPagado:C.btnPendiente;
+  btn.textContent=btnCfg.txt;
+  show('success');
+}
+
+function renderHist(){
+  const list=document.getElementById('hist-list');
+  const f=hist.filter(h=>h.tipo===tipo.toUpperCase());
+  if(!f.length){list.innerHTML='<div class="empty">Todavía no hay registros<br><span style="font-size:12px;opacity:.6">Los que cargues aparecen acá</span></div>';return}
+  const dc={EGRESO:'eg',INGRESO:'in',CAJA:'ca'};
+  list.innerHTML=f.slice(0,30).map(h=>{
+    const dc2=dc[h.tipo]||'ca';
+    const pend=h.estado&&h.estado.includes('Pendiente');
+    const pillCls=pend&&h.tipo==='INGRESO'?'hp-cob':pend?'hp-pen':'hp-pag';
+    const pillTxt=pend&&h.tipo==='INGRESO'?'A cobrar':pend?'Pendiente':'Pagado';
+    const signo=h.tipo==='EGRESO'?'-':'+';
+    return `<div class="hist-item">
+      <div class="hdot hdot-${dc2}"></div>
+      <div class="hinfo">
+        <div class="hnombre">${h.descripcion}</div>
+        <div class="hmeta">${h.fecha} · ${h.categoria} · ${h.usuario}</div>
+      </div>
+      <div class="hright">
+        <div class="hmonto hmonto-${dc2}">${signo}$${parseInt(h.monto).toLocaleString('es-AR')}</div>
+        <span class="hpill ${pillCls}">${pillTxt}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
