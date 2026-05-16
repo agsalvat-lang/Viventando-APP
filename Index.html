@@ -551,7 +551,12 @@ function selChip(el,group){
             group==='pago'||group==='formaEsp'?'on':
             group==='prior'&&el.textContent==='Alta'?'on-a':'on';
   el.classList.add(cls);
-  if(group==='cat')selCat=el.textContent;
+  if(group==='cat'){
+    selCat=el.textContent;
+    // Mostrar N° cheque si la categoría es cobro cheque
+    const campoCheque=document.getElementById('campo-cheque');
+    if(campoCheque) campoCheque.style.display=el.textContent==='Cobro cheque'?'block':'none';
+  }
   if(group==='estado')selEstado=el.dataset.key;
   if(group==='pago'){
     selPago=el.textContent;
