@@ -555,12 +555,16 @@ function selChip(el,group){
   if(group==='estado')selEstado=el.dataset.key;
   if(group==='pago'){
     selPago=el.textContent;
-    // Mostrar N° cheque si forma de pago es Cheque
     const campoCheque=document.getElementById('campo-cheque');
     if(campoCheque) campoCheque.style.display=el.textContent==='Cheque'?'block':'none';
   }
   if(group==='prior')selPrior=el.textContent;
-  if(group==='formaEsp')selFormaEsp=el.textContent;
+  if(group==='formaEsp'){
+    selFormaEsp=el.textContent;
+    // Mostrar N° cheque también cuando forma esperada es Cheque
+    const campoCheque=document.getElementById('campo-cheque');
+    if(campoCheque) campoCheque.style.display=el.textContent==='Cheque'?'block':'none';
+  }
 }
 
 function selQuien(el){
