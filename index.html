@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -121,6 +121,10 @@ select.ifield option{background:#1E2D45}
 .chip:active{transform:scale(.96)}
 
 /* CONDICIONAL - aparece cuando está pendiente */
+.campo-extra{background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.2);
+  border-radius:var(--r-sm);padding:12px 14px;margin-top:10px}
+.campo-extra-title{font-size:10px;font-weight:600;color:var(--verde);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:8px}
 .cond-box{background:rgba(232,160,32,.07);border:1px solid var(--amber-b);
   border-radius:var(--r-sm);padding:14px;margin-top:10px}
 .cond-title{font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;
@@ -334,6 +338,24 @@ select.ifield option{background:#1E2D45}
         </div>
       </div>
 
+      <!-- CAMPO EXTRA: N° factura (ingreso) / N° cheque (cheque) -->
+      <div id="campo-factura" style="display:none;margin-top:12px">
+        <div class="campo-extra">
+          <div class="campo-extra-title" id="campo-factura-title">N° de factura</div>
+          <input type="text" class="ifield" id="inp-factura"
+            placeholder="Ej: 0001-00001234" autocomplete="off" style="margin-top:6px">
+        </div>
+      </div>
+
+      <!-- CAMPO EXTRA: N° cheque -->
+      <div id="campo-cheque" style="display:none;margin-top:12px">
+        <div class="campo-extra">
+          <div class="campo-extra-title">N° de cheque</div>
+          <input type="text" class="ifield" id="inp-cheque"
+            placeholder="Ej: 00123456" autocomplete="off" style="margin-top:6px">
+        </div>
+      </div>
+
       <!-- CONDICIONAL: si PENDIENTE → fecha vencimiento + prioridad -->
       <div id="cond-pendiente" class="cond-box" style="display:none">
         <div class="cond-title" id="cond-title">Datos del vencimiento</div>
@@ -502,6 +524,9 @@ function toggleCond(estado){
   const pendiente=document.getElementById('cond-pendiente');
   pagado.style.display=estado==='pagado'?'block':'none';
   pendiente.style.display=estado==='pendiente'?'block':'none';
+  // Mostrar N° factura solo en ingresos
+  const campoFact=document.getElementById('campo-factura');
+  if(campoFact) campoFact.style.display=tipo==='ingreso'?'block':'none';
   // Actualizar botón
   const C=CFG[tipo];
   const btnCfg=estado==='pagado'?C.btnPagado:C.btnPendiente;
@@ -528,7 +553,12 @@ function selChip(el,group){
   el.classList.add(cls);
   if(group==='cat')selCat=el.textContent;
   if(group==='estado')selEstado=el.dataset.key;
-  if(group==='pago')selPago=el.textContent;
+  if(group==='pago'){
+    selPago=el.textContent;
+    // Mostrar N° cheque si forma de pago es Cheque
+    const campoCheque=document.getElementById('campo-cheque');
+    if(campoCheque) campoCheque.style.display=el.textContent==='Cheque'?'block':'none';
+  }
   if(group==='prior')selPrior=el.textContent;
   if(group==='formaEsp')selFormaEsp=el.textContent;
 }
@@ -560,6 +590,10 @@ function reset(){
   document.getElementById('quien-row').querySelectorAll('.quien-chip')[0].classList.add('on');
   document.getElementById('cond-pagado').style.display='none';
   document.getElementById('cond-pendiente').style.display='none';
+  document.getElementById('campo-factura').style.display='none';
+  document.getElementById('campo-cheque').style.display='none';
+  const inpF=document.getElementById('inp-factura');if(inpF)inpF.value='';
+  const inpC=document.getElementById('inp-cheque');if(inpC)inpC.value='';
   // reset prioridad
   const pr=document.getElementById('chips-prior');
   if(pr)pr.querySelectorAll('.chip')[0].classList.add('on-a');
@@ -582,6 +616,8 @@ async function enviar(){
   const mes=now.toISOString().slice(0,7);
   const fechaVenc=document.getElementById('inp-fecha-venc').value;
 
+  const nroFactura=document.getElementById('inp-factura').value.trim();
+  const nroCheque=document.getElementById('inp-cheque').value.trim();
   const data={
     tipo:tipo.toUpperCase(),
     usuario:selQuienVal,
@@ -591,6 +627,8 @@ async function enviar(){
     monto,
     estado:selEstado==='pagado'?'Pagado/Cobrado':'Pendiente',
     formaPago:selEstado==='pagado'?selPago:selFormaEsp||'A definir',
+    nroFactura:nroFactura||'',
+    nroCheque:nroCheque||'',
     fechaVencimiento:selEstado==='pendiente'?fechaVenc:'',
     prioridad:selEstado==='pendiente'?selPrior:'',
     timestamp:now.toISOString()
@@ -636,6 +674,8 @@ async function enviar(){
     <div class="srow"><span>Categoría</span><span>${selCat}</span></div>
     <div class="srow"><span>Estado</span><span>${pill}</span></div>
     ${selEstado==='pagado'?`<div class="srow"><span>Forma de pago</span><span>${selPago}</span></div>`:''}
+    ${nroFactura?`<div class="srow"><span>N° Factura</span><span>${nroFactura}</span></div>`:''}
+    ${nroCheque?`<div class="srow"><span>N° Cheque</span><span>${nroCheque}</span></div>`:''}
     ${selEstado==='pendiente'?`<div class="srow"><span>Vence / cobro est.</span><span>${fechaVenc||'—'}</span></div>`:''}
     ${selEstado==='pendiente'?`<div class="srow"><span>Prioridad</span><span>${selPrior}</span></div>`:''}
     <div class="srow"><span>Registrado por</span><span>${selQuienVal}</span></div>`;
